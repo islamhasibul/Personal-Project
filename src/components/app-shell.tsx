@@ -1,10 +1,13 @@
 import Link from "next/link";
 
+import { LogoutButton } from "@/components/logout-button";
+
 /**
  * Top navigation shell for the signed-in area of the app.
  *
- * Phase 1 placeholder: the Logout control is a real-looking button but is
- * not wired to Supabase Auth yet. Phase 3 replaces it with a server action.
+ * `userEmail` is rendered only when the caller has an authenticated user.
+ * The Logout control is a real form posting to a server action, so signing
+ * out clears the Supabase session cookies server-side.
  */
 export function AppShell({
   children,
@@ -18,26 +21,24 @@ export function AppShell({
       <header className="border-b border-border bg-surface">
         <nav className="mx-auto flex h-14 w-full max-w-5xl items-center gap-6 px-4">
           <Link
-            href="/"
+            href="/projects"
             className="text-base font-semibold tracking-tight text-foreground"
           >
             DevDesk
           </Link>
           <div className="flex items-center gap-4 text-sm text-muted">
-            <Link href="/" className="hover:text-foreground">
-              Dashboard
-            </Link>
             <Link href="/projects" className="hover:text-foreground">
               Projects
+            </Link>
+            <Link href="/issues" className="hover:text-foreground">
+              Issues
             </Link>
           </div>
           <div className="ml-auto flex items-center gap-4 text-sm">
             {userEmail ? (
-              <span className="text-muted">{userEmail}</span>
+              <span className="hidden text-muted sm:inline">{userEmail}</span>
             ) : null}
-            <span className="rounded-md border border-border px-3 py-1.5 text-muted">
-              Log out
-            </span>
+            <LogoutButton />
           </div>
         </nav>
       </header>

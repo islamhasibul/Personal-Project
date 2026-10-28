@@ -9,7 +9,14 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "check": "npm run lint && npm run typecheck && npm run test"
+    "check": "npm run lint && npm run typecheck && npm run test",
+    "check:migrations": "node scripts/check-migrations.mjs",
+    "check:e2e": "node scripts/e2e-check.mjs",
+    "check:browser": "node scripts/browser-check.mjs",
+    "check:schema": "node scripts/schema-conformance.mjs",
+    "check:cookies": "node scripts/cookie-check.mjs",
+    "check:states": "node scripts/states-check.mjs",
+    "check:crud": "node scripts/crud-check.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

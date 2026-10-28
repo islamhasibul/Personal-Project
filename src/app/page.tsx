@@ -1,22 +1,24 @@
-import { AppShell } from "@/components/app-shell";
+import { redirect } from "next/navigation";
+
+import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 
 /**
- * Landing route for Phase 1.
+ * The landing route.
  *
- * Once authentication lands (Phase 3) this page becomes a redirect:
- * signed-in users go to /dashboard, everyone else to /login.
+ * Signed-in users go to their projects; everyone else goes to the login
+ * page. The check reads the session cookie only -- the authoritative
+ * verification happens in `requireUser()` on the pages themselves.
  */
-export default function Home() {
-  return (
-    <AppShell>
-      <div className="flex flex-col items-start gap-2">
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-          DevDesk
-        </h1>
-        <p className="text-sm text-muted">
-          A clean issue tracker for individual developers.
-        </p>
-      </div>
-    </AppShell>
-  );
+export default async function Home() {
+  if (!isSupabaseConfigured()) {
+    redirect("/login");
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  redirect(user ? "/projects" : "/login");
 }
